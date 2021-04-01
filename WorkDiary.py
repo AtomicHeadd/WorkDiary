@@ -3,6 +3,8 @@ from copy import *
 
 # 追加したい設定項目
 # 計測時間を表示する/時間、分だけ
+# 30分ごとに自動で録画を停止する機能
+# 総時間と統計(時間、日、月)
 #
 # 問題
 # 差分のみで経過時間を計っているので日付をまたぐと面白いと思います
@@ -107,10 +109,6 @@ class recorder():
         self.root.after(1000, self.update_clock)
 
     def __init__(self):
-        if hasattr(sys, 'setdefaultencoding'):
-            import locale
-            lang, enc = locale.getdefaultlocale()
-            sys.setdefaultencoding('utf-8')
         self.root = tk.Tk()
         self.start_time = [0, 0, 0]
         # label.pack()
