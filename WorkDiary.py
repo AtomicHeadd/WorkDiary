@@ -109,6 +109,10 @@ class recorder():
         self.root.after(1000, self.update_clock)
 
     def __init__(self):
+        if hasattr(sys, 'setdefaultencoding'):
+            import locale
+            lang, enc = locale.getdefaultlocale()
+            sys.setdefaultencoding('utf-8')
         self.root = tk.Tk()
         self.start_time = [0, 0, 0]
         # label.pack()
