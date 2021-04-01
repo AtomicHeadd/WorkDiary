@@ -62,6 +62,7 @@ class recorder():
         self.button1.configure(text=self.button_name[0])
         self.button2.configure(text=self.button_name[1])
         self.button3.configure(text=self.button_name[2])
+        self.current_target.configure(text="")
 
     def button1_clicked(self):
         self.save_recording()
@@ -70,9 +71,10 @@ class recorder():
             self.current_target_index = 0
             self.button1.configure(text=self.button_name[0] + "停止")
             self.start_time = time.strftime("%H:%M:%S").split(":")
+            self.passed_time = [0, 0, 0]
+            self.current_target.configure(text=self.button_name[0] + "計測中... ")
         else:
             self.current_target_index = -1
-        self.update_clock()
 
     def button2_clicked(self):
         self.save_recording()
@@ -81,9 +83,10 @@ class recorder():
             self.current_target_index = 1
             self.button2.configure(text=self.button_name[1] + "停止")
             self.start_time = time.strftime("%H:%M:%S").split(":")
+            self.passed_time = [0, 0, 0]
+            self.current_target.configure(text=self.button_name[1] + "計測中... ")
         else:
             self.current_target_index = -1
-        self.update_clock()
 
     def button3_clicked(self):
         self.save_recording()
@@ -91,18 +94,19 @@ class recorder():
             self.current_target_index = 2
             self.button3.configure(text=self.button_name[2] + "停止")
             self.start_time = time.strftime("%H:%M:%S").split(":")
+            self.passed_time = [0, 0, 0]
+            self.current_target.configure(text=self.button_name[2] + "計測中... ")
         else:
             self.current_target_index = -1
-        self.update_clock()
 
     def update_clock(self):
-        now_str = time.strftime("%H:%M:%S")
-        now = now_str.split(":")
-        passed_time = [0, 0, 0]
-        for i in range(3):
-            passed_time[i] += int(now[i]) - int(self.start_time[i])
         if self.current_target_index != -1:
-            hour_minute = str(passed_time[0]) + "時間" + str(passed_time[1]) + "分"
+            hour_minute = str(self.passed_time[0]) + "時間" + str(self.passed_time[1]) + "分"
+            self.passed_time[2] += 1
+            if self.passed_time[2] == 60:
+                self.passed_time[1] += 1
+                if self.passed_time[1] == 60:
+                    self.passed_time[0] += 1
             self.current_target.configure(text=self.button_name[self.current_target_index] + "計測中... " + hour_minute)
         else:
             self.current_target.configure(text="")
@@ -115,6 +119,7 @@ class recorder():
             sys.setdefaultencoding('utf-8')
         self.root = tk.Tk()
         self.start_time = [0, 0, 0]
+        self.passed_time = [0, 0, 0]
         # label.pack()
         # 設定ファイル類
         self.load()
