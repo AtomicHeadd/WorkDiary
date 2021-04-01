@@ -9,10 +9,10 @@ This script now only work in recording part(, doesn't work in statistics part).
 ・日付の変化に未対応  
 ・正しい経過時間ではない(誤差<1分)  
 ・設定ファイルの文字をチェックしていない  
-・ボタンの名前を日本語にすると読み込めずに立ち上がらない  
+・~~ボタンの名前を日本語にすると読み込めずに立ち上がらない~~直したました  
 Some problems are left, which is written detailed in code.  
 These ain't fixable but I just have few time to work on.  
 ・Don't work over the days.  
 ・May contain extra time (under a minute).  
 ・Don't check string in setting file.  
-・Non-English button name prevent execution.  
+・~~Non-English button name prevent execution.~~(fixed)  
