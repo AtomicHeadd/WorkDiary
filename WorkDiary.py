@@ -7,9 +7,7 @@ from copy import *
 # 総時間と統計(時間、日、月)
 #
 # 問題
-# 差分のみで経過時間を計っているので日付をまたぐと面白いと思います
 # 設定ファイルの文字列次第でデータファイルが壊れると思います(特に改行や,)
-# 経過時間は秒を見ていないので59秒に録画を開始するとすぐに1分ボーナスが入ります
 try:
     import Tkinter as tk
 except:
@@ -56,7 +54,10 @@ class recorder():
             else:
                 self.record_file = open(recordfile_name, mode="a")
             start_time_str = str(self.start_time[0]) + ":" + str(self.start_time[1]) + ":" + self.start_time[2]
-            passed_time_str = str(int(now[0]) - int(self.start_time[0])) + ":" + str(int(now[1]) - int(self.start_time[1]))
+            passed_time_str = str(self.passed_time[0]) + ":"
+            if int(self.passed_time[1]) < 9:
+                passed_time_str += "0"
+            passed_time_str += str(self.passed_time[1])
             self.record_file.write(time.strftime("%Y-%m-%d ") + start_time_str + ", " + self.button_name[self.current_target_index] + ", " + passed_time_str + "\n")
             self.record_file.close()
         self.button1.configure(text=self.button_name[0])
@@ -105,8 +106,10 @@ class recorder():
             self.passed_time[2] += 1
             if self.passed_time[2] == 60:
                 self.passed_time[1] += 1
+                self.passed_time[2] = 0
                 if self.passed_time[1] == 60:
                     self.passed_time[0] += 1
+                    self.passed_time[1] = 0
             self.current_target.configure(text=self.button_name[self.current_target_index] + "計測中... " + hour_minute)
         else:
             self.current_target.configure(text="")
