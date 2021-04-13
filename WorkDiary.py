@@ -22,16 +22,12 @@ class recorder():
     def load(self):
         configfile_name = "WorkDiary.setting"
         if not os.path.isfile(configfile_name):
-            # 存在しない場合
-            setting_file = open(configfile_name, mode="x")
-            self.button_name = ["ボタン1", "ボタン2", "ボタン3"]
-            setting_file.write("button_name1=ボタン1\n")
-            setting_file.write("button_name2=ボタン2\n")
-            setting_file.write("button_name3=ボタン3\n")
-            setting_file.close()
-        else:
-            setting_file = open(configfile_name, "r")
-            self.button_name = ["ボタン1", "ボタン2", "ボタン3"]
+            # 設定ファイルが存在しない場合
+            with open(configfile_name, mode="x") as f:
+                f.write("button_name1=ボタン1\nbutton_name2=ボタン2\nbutton_name3=ボタン3\n")
+            return
+        # 設定ファイルが存在する場合
+        with open(configfile_name, "r") as setting_file:
             for s in setting_file:
                 content = s.split("=")
                 if "button_name" in content[0]:
@@ -39,20 +35,18 @@ class recorder():
                     if num <= 0 or num >= 4:
                         continue
                     self.button_name[num-1] = content[1].strip()
-            setting_file.close()
-
 
     def save_recording(self):
         if self.current_target_index == -1:
             return
-        recordfile_name = "DiaryRecord.csv"
+        record_file_name = "DiaryRecord.csv"
         now_str = time.strftime("%H:%M:%S")
         now = now_str.split(":")
         if not (int(self.start_time[0]) == int(now[0]) and int(self.start_time[1]) == int(now[1])):
-            if not os.path.isfile(recordfile_name):
-                self.record_file = open(recordfile_name, mode="x")
+            if not os.path.isfile(record_file_name):
+                self.record_file = open(record_file_name, mode="x")
             else:
-                self.record_file = open(recordfile_name, mode="a")
+                self.record_file = open(record_file_name, mode="a")
             start_time_str = str(self.start_time[0]) + ":" + str(self.start_time[1]) + ":" + self.start_time[2]
             passed_time_str = str(self.passed_time[0]) + ":"
             if int(self.passed_time[1]) < 9:
@@ -125,6 +119,7 @@ class recorder():
         self.passed_time = [0, 0, 0]
         # label.pack()
         # 設定ファイル類
+        self.button_name = ["ボタン1", "ボタン2", "ボタン3"]
         self.load()
 
         # ウィンドウ作成
