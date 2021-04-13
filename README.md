@@ -20,10 +20,10 @@ This script now only work in recording part(, doesn't work in statistics part).
 
 ## Current Problem
 Some problems are left, which is written detailed in code.  
-・Don't check string in setting file.  
+- Don't check string in setting file.  
 
 ## Future Plan
-Fuctions planned to be implemented future develop.
+Fuctions planned to be implemented future development.
 - Statistics window
   1. Show indivisual sum of time spent on the work.
   2. Show indivisual sum of time based on daily, monthly and yealy.
