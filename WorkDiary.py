@@ -60,7 +60,7 @@ class recorder():
         self.current_target.configure(text="")
         self.load_data()
 
-    def button_clicked(self, index):
+    def record_button_clicked(self, index):
         buttons = [self.button1, self.button2, self.button3]
         self.save_recording()
         if not self.current_target_index == index:
@@ -72,6 +72,30 @@ class recorder():
             self.current_target.configure(text=self.button_name[index] + "計測中... ")
         else:
             self.current_target_index = -1
+
+    def stats_button_clicked(self, right):
+        date_num = [int(s) for s in self.stats_showing_date.split("-")]
+        today_num = [int(s) for s in time.strftime("%Y-%m-%d").split("-")]
+        if (date_num == today_num and right) or (date_num == self.software_origin and not right):
+            return
+        if right:
+            date_num[2] += 1
+            if date_num[2] > 31:
+                date_num[1] += 1
+                date_num[2] = 1
+                if date_num[1] > 12:
+                    date_num[0] += 1
+                    date_num[1] = 1
+        else:
+            date_num[2] -= 1
+            if date_num[2] < 1:
+                date_num[2] = 31
+                date_num[1] -= 1
+                if date_num[1] < 1:
+                    date_num[1] = 12
+                    date_num[0] -= 1
+        self.stats_showing_date = f"{date_num[0]}-{date_num[1]}-{date_num[2]}"
+        self.load_data(date_num)
 
     # 統計移動ボタンの実装には統計画面が今表示している日付が必要
 
@@ -90,7 +114,7 @@ class recorder():
             self.current_target.configure(text="")
         self.root.after(1000, self.update_clock)
 
-    def load_data(self, target=time.strftime("%Y-%m-%d").split("-")):
+    def load_data(self, target=[int(s) for s in time.strftime("%Y-%m-%d").split("-")]):
         a = dict()
         with open("DiaryRecord.csv", "r") as f:
             for line in f:
@@ -105,9 +129,12 @@ class recorder():
                         a[task_name] = [int(x)+int(y) for (x, y) in zip(a[task_name], [line_info.group(3), line_info.group(4)])]
                     # 無い場合
                     else:
-                        a[task_name] = [line_info.group(3), line_info.group(4)]
-        if target == time.strftime("%Y-%m-%d").split("-"):
+                        a[task_name] = [int(line_info.group(3)), int(line_info.group(4))]
+        today_num = [int(s) for s in time.strftime("%Y-%m-%d").split("-")]
+        if target == today_num:
             stats_content = "本日\n"
+        elif target == self.software_origin:
+            stats_content = "このソフトウェアの誕生日です\n"
         else:
             stats_content = f"{target[0]}/{target[1]}/{target[2]}\n"
         if len(a) == 0:
@@ -131,6 +158,8 @@ class recorder():
         self.root = tk.Tk()
         self.start_time = [0, 0, 0]
         self.passed_time = [0, 0, 0]
+        self.stats_showing_date = time.strftime("%Y-%m-%d")
+        self.software_origin = [2021, 4, 3]
         # label.pack()
         # 設定ファイル類
         self.button_name = ["ボタン1", "ボタン2", "ボタン3"]
@@ -150,21 +179,23 @@ class recorder():
         tab_stats = tk.Button(self.root, text="統計")
         tab_stats.grid(row=0, column=2)
         self.button1 = tk.Button(self.root, text=self.button_name[0], height=5, width=10,
-                                 command= lambda: self.button_clicked(0))
+                                 command= lambda: self.record_button_clicked(0))
         self.button1.place(x=10, y=40)
         self.button2 = tk.Button(self.root, text=self.button_name[1], height=5, width=10,
-                                 command= lambda: self.button_clicked(1))
+                                 command= lambda: self.record_button_clicked(1))
         self.button2.place(x=140, y=40)
         self.button3 = tk.Button(self.root, text=self.button_name[2], height=5, width=10,
-                                 command= lambda: self.button_clicked(2))
+                                 command= lambda: self.record_button_clicked(2))
         self.button3.place(x=270, y=40)
         self.current_target_index = -1
         self.current_target = tk.Label(text="")
         self.current_target.place(x=0, y=130)
         #統計ボタン
-        self.stats_left = tk.Button(self.root, text="←", height=1, width=1)
+        self.stats_left = tk.Button(self.root, text="←", height=1, width=1,
+                                    command=lambda : self.stats_button_clicked(False))
         self.stats_left.place(x=10, y=180)
-        self.stats_right = tk.Button(self.root, text="→", height=1, width=1)
+        self.stats_right = tk.Button(self.root, text="→", height=1, width=1,
+                                     command=lambda : self.stats_button_clicked(True))
         self.stats_right.place(x=340, y=180)
         self.stats_text = tk.Label(text="本日")
         self.stats_text.place(x=140, y=150)
