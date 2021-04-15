@@ -95,6 +95,8 @@ class recorder():
         else:
             self.current_target_index = -1
 
+    # 統計移動ボタンの実装には統計画面が今表示している日付が必要
+
     def update_clock(self):
         if self.current_target_index != -1:
             hour_minute = str(self.passed_time[0]) + "時間" + str(self.passed_time[1]) + "分"
@@ -119,11 +121,11 @@ class recorder():
                     continue
                 date_num = [int(s) for s in line_info.group(1).split("-")]
                 if date_num == target:
-                    #既に登録されている場合
+                    # 既に登録されている場合
                     task_name = line_info.group(2)
                     if task_name in a:
                         a[task_name] = [int(x)+int(y) for (x, y) in zip(a[task_name], [line_info.group(3), line_info.group(4)])]
-                    #無い場合
+                    # 無い場合
                     else:
                         a[task_name] = [line_info.group(3), line_info.group(4)]
         if target == time.strftime("%Y-%m-%d").split("-"):
