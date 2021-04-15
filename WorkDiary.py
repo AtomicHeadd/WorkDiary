@@ -60,38 +60,16 @@ class recorder():
         self.current_target.configure(text="")
         self.load_data()
 
-    def button1_clicked(self):
+    def button_clicked(self, index):
+        buttons = [self.button1, self.button2, self.button3]
         self.save_recording()
-        if not self.current_target_index == 0:
+        if not self.current_target_index == index:
             self.save_recording()
-            self.current_target_index = 0
-            self.button1.configure(text=self.button_name[0] + "停止")
+            self.current_target_index = index
+            buttons[index].configure(text=self.button_name[index] + "停止")
             self.start_time = time.strftime("%H:%M:%S").split(":")
             self.passed_time = [0, 0, 0]
-            self.current_target.configure(text=self.button_name[0] + "計測中... ")
-        else:
-            self.current_target_index = -1
-
-    def button2_clicked(self):
-        self.save_recording()
-        if not self.current_target_index == 1:
-            self.save_recording()
-            self.current_target_index = 1
-            self.button2.configure(text=self.button_name[1] + "停止")
-            self.start_time = time.strftime("%H:%M:%S").split(":")
-            self.passed_time = [0, 0, 0]
-            self.current_target.configure(text=self.button_name[1] + "計測中... ")
-        else:
-            self.current_target_index = -1
-
-    def button3_clicked(self):
-        self.save_recording()
-        if not self.current_target_index == 2:
-            self.current_target_index = 2
-            self.button3.configure(text=self.button_name[2] + "停止")
-            self.start_time = time.strftime("%H:%M:%S").split(":")
-            self.passed_time = [0, 0, 0]
-            self.current_target.configure(text=self.button_name[2] + "計測中... ")
+            self.current_target.configure(text=self.button_name[index] + "計測中... ")
         else:
             self.current_target_index = -1
 
@@ -171,11 +149,14 @@ class recorder():
         tab_watch.grid(row=0, column=1)
         tab_stats = tk.Button(self.root, text="統計")
         tab_stats.grid(row=0, column=2)
-        self.button1 = tk.Button(self.root, text=self.button_name[0], height=5, width=10, command=self.button1_clicked)
+        self.button1 = tk.Button(self.root, text=self.button_name[0], height=5, width=10,
+                                 command= lambda: self.button_clicked(0))
         self.button1.place(x=10, y=40)
-        self.button2 = tk.Button(self.root, text=self.button_name[1], height=5, width=10, command=self.button2_clicked)
+        self.button2 = tk.Button(self.root, text=self.button_name[1], height=5, width=10,
+                                 command= lambda: self.button_clicked(1))
         self.button2.place(x=140, y=40)
-        self.button3 = tk.Button(self.root, text=self.button_name[2], height=5, width=10, command=self.button3_clicked)
+        self.button3 = tk.Button(self.root, text=self.button_name[2], height=5, width=10,
+                                 command= lambda: self.button_clicked(2))
         self.button3.place(x=270, y=40)
         self.current_target_index = -1
         self.current_target = tk.Label(text="")
