@@ -52,7 +52,7 @@ class recorder():
             if int(self.passed_time[1]) < 9:
                 passed_time_str += "0"
             passed_time_str += str(self.passed_time[1])
-            self.record_file.write(time.strftime("%Y-%m-%d ") + start_time_str + ", " + self.button_name[self.current_target_index] + ", " + passed_time_str + "\n")
+            self.record_file.write(self.record_start_YMD + start_time_str + ", " + self.button_name[self.current_target_index] + ", " + passed_time_str + "\n")
             self.record_file.close()
         self.button1.configure(text=self.button_name[0])
         self.button2.configure(text=self.button_name[1])
@@ -70,6 +70,7 @@ class recorder():
             self.start_time = time.strftime("%H:%M:%S").split(":")
             self.passed_time = [0, 0, 0]
             self.current_target.configure(text=self.button_name[index] + "計測中... ")
+            self.record_start_YMD = time.strftime("%Y-%m-%d ")
         else:
             self.current_target_index = -1
 
@@ -160,6 +161,7 @@ class recorder():
         self.passed_time = [0, 0, 0]
         self.stats_showing_date = time.strftime("%Y-%m-%d")
         self.software_origin = [2021, 4, 3]
+        self.record_start_YMD = "2021-4-3 "
         # label.pack()
         # 設定ファイル類
         self.button_name = ["ボタン1", "ボタン2", "ボタン3"]
