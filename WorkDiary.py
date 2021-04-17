@@ -147,7 +147,7 @@ class recorder():
             if value[0] + up < 1:
                 stats_content += key + ": " + str(value[1]) + "分\n"
             else:
-                stats_content += key + ": " + str(up) + "時間" + str(rest) + "分\n"
+                stats_content += key + ": " + str(value[0] + up) + "時間" + str(rest) + "分\n"
         self.stats_text.configure(text=stats_content)
 
     def __init__(self):
