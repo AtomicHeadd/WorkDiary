@@ -2,7 +2,7 @@
 English translation is below.  
 ## 説明
 作業時間を記録するPythonスクリプトです。  
-現在は記録する機能しか実装されていません。  
+簡易的な作業記録を確認するセクションを追加しました。
 
 ## 問題
 現在以下の問題が存在し、詳しくはコード内にコメントしています。  
@@ -16,7 +16,7 @@ English translation is below.
 
 ## Description
 A stopwatch that remembers time you spent on specific works.  
-This script now only work in recording part(, doesn't work in statistics part).  
+Made temporary statistics section  
 
 ## Current Problem
 Some problems are left, which is written detailed in code.  
